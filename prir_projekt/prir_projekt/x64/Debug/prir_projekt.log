@@ -1,2 +1,4 @@
 ﻿  Źródło.cpp
-  prir_projekt.vcxproj -> C:\Users\milos\Desktop\PK\PRIR\prir_projekt\x64\Debug\prir_projekt.exe
+C:\Users\milos\Desktop\GIT\prir\prir_projekt\prir_projekt\Źródło.cpp(86,7): warning C4101: "name": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\milos\Desktop\GIT\prir\prir_projekt\prir_projekt\Źródło.cpp(85,18): warning C4101: "length": lokalna zmienna, do której nie istnieje odwołanie
+  prir_projekt.vcxproj -> C:\Users\milos\Desktop\GIT\prir\prir_projekt\x64\Debug\prir_projekt.exe
