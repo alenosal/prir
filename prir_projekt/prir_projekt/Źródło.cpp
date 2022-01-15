@@ -81,8 +81,8 @@ int ompAverage(int min, int max, int setValue, int* table) {
 
 int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[]) {
   printf("mpiAverage\n");
-
-  int sum = 0, count = 0, average;
+  
+  unsigned long long sum = 0, count = 0, average;
   int num, m, tmp = 0, number = 0;
   int rank, size, length;
   char name[80];
@@ -100,8 +100,10 @@ int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[
 
     printf("rank = 0\n");
 
-    for (i = 1; i < size; i++)
+    for (i = 1; i < size; i++) {
       MPI_Send(table, sizeof(table) / sizeof(int), MPI_INT, i, 0, MPI_COMM_WORLD);
+      printf("sizeof(table) / sizeof(int): %d\n", sizeof(table) / sizeof(int));
+    }
   }
 
   else
@@ -110,6 +112,7 @@ int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[
 
     MPI_Get_count(&status, MPI_INT, &number);
     MPI_Recv(table, sizeof(table) / sizeof(int), MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+    printf("sizeof(table) / sizeof(int): %d\n", sizeof(table) / sizeof(int));
 
     printf("rank: %d\n", rank);
 
@@ -129,9 +132,12 @@ int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[
 
     printf("suma: %d\n", sum);
   }
+  
+  if (sum / count != 0) {
+    average = sum / count;
+  }
 
-  average = sum / count;
-
+  printf("CLOCKS_PER_SEC: %d\n", CLOCKS_PER_SEC);
   float seconds = (float)(MPI_Wtime() - start) / CLOCKS_PER_SEC;
   printf("%f\n", seconds);
 
