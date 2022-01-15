@@ -111,8 +111,10 @@ int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[
     printf("else\n");
 
     MPI_Get_count(&status, MPI_INT, &number);
-    MPI_Recv(table, sizeof(table) / sizeof(int), MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
-    printf("sizeof(table) / sizeof(int): %d\n", sizeof(table) / sizeof(int));
+  
+    if (sizeof(table) / sizeof(int) != 0) {
+      MPI_Recv(table, sizeof(table) / sizeof(int), MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+    }
 
     printf("rank: %d\n", rank);
 
