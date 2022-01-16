@@ -19,6 +19,64 @@ int* createTable() {
   return table;
 }
 
+int basicAverage(int min, int max, int setValue, int* table) {
+
+  int sum = 0, count = 0, average;
+  int num, m, tmp = 0;
+
+  clock_t start = clock();
+
+  for (int i = 0; i < N; i++) {
+    num = table[i];
+    while (num > 0) {
+      m = num % 10;
+      tmp = tmp + m;
+      num = num / 10;
+    }
+    if (min < table[i] && table[i]<max && tmp > setValue) {
+      sum = sum + table[i];
+      count++;
+    }
+    tmp = 0;
+  }
+
+  average = sum / count;
+  clock_t end = clock();
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("%f\n", seconds);
+
+  return average;
+}
+
+int ompAverage(int min, int max, int setValue, int* table) {
+  int sum = 0, count = 0, average;
+  int num, m, tmp = 0;
+
+  clock_t start = clock();
+
+#pragma omp parallel for num_threads(9)
+  for (int i = 0; i < N; i++) {
+    num = table[i];
+    while (num > 0) {
+      m = num % 10;
+      tmp = tmp + m;
+      num = num / 10;
+    }
+    if (min < table[i] && table[i]<max && tmp > setValue) {
+      sum = sum + table[i];
+      count++;
+    }
+    tmp = 0;
+  }
+
+  average = sum / count;
+  clock_t end = clock();
+  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  printf("%f\n", seconds);
+
+  return average;
+}
+
 int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[]) {
   unsigned long long int sum = 0, count = 0;
   int num, m, tmp = 0, number = 0, tmplength = 0, * tmptable, average = 0, tmpaverage;
@@ -104,6 +162,8 @@ int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[
 
 int main(int argc, char* argv[]) {
   int* table = createTable();
+  printf("%d\n", basicAverage(10000, 34000, 6, table));;
+  printf("%d\n", ompAverage(10000, 34000, 6, table));
   printf("%d\n", mpiAverage(10000, 34000, 6, table, argc, argv));
 
   return 0;
