@@ -20,8 +20,6 @@ int* createTable() {
 }
 
 int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[]) {
-  printf("mpiAverage\n");
-
   unsigned long long int sum = 0, count = 0;
   int num, m, tmp = 0, number = 0, tmplength = 0, * tmptable, average = 0, tmpaverage;
   int rank, size, length;
@@ -58,7 +56,7 @@ int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[
     }
 
     tmpaverage = sum / count;
-    printf("rank: %d\t tmpaverage: %d\n", rank, tmpaverage);
+    //printf("rank: %d\t tmpaverage: %d\n", rank, tmpaverage);
 
     MPI_Send(&tmpaverage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
   }
@@ -79,17 +77,19 @@ int mpiAverage(int min, int max, int setValue, int* table, int argc, char* argv[
       tmp = 0;
     }
 
-    printf("%d += %d\n", average, sum / count);
+    //printf("%d += %d\n", average, sum / count);
     average += sum / count;
 
     for (i = 1; i < size; i++) {
       MPI_Recv(&tmpaverage, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
       
-      printf("%d += %d\n", average, tmpaverage);
+      //printf("%d += %d\n", average, tmpaverage);
       average += tmpaverage;
     }
     
     average /= size;
+
+    printf("czas: %lf dla %d procesow\n", MPI_Wtime() - start, size);
   }
 
   MPI_Finalize();
